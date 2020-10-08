@@ -2,37 +2,23 @@ import classes from './PDBoard.module.css';
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionCreators from '../../store/actions/index';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 const PDBoard = (props) => {
-
-   /*  const getMessage = async () => {
-        
-
-        const response = await fetch(`/api/GetMessage`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        });
-        const body = await response.json();
-        console.log(body); 
-    }; */
-
-
 
     const dispatch = useDispatch();
 
     const onGetMessage =  useCallback(() => dispatch(actionCreators.getMessage()), [dispatch]);
 
-
     const message = useSelector(state => state.message.message);
+    const loading = useSelector(state => state.message.loading);
 
     useEffect(() => {
         onGetMessage();
         console.log('board loaded');
     }, [onGetMessage]);
 
-    let myMessage = 'No message from API'
+    let myMessage = loading ? <Spinner /> : null;
 
     if(message){
         myMessage = message;
