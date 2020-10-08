@@ -8,7 +8,7 @@ const PDBoard = (props) => {
 
     const dispatch = useDispatch();
 
-    const onGetMessage =  useCallback(() => dispatch(actionCreators.getMessage()), [dispatch]);
+    const onGetMessage = useCallback(() => dispatch(actionCreators.getMessage()), [dispatch]);
 
     const message = useSelector(state => state.message.message);
     const loading = useSelector(state => state.message.loading);
@@ -20,14 +20,18 @@ const PDBoard = (props) => {
 
     let myMessage = loading ? <Spinner /> : null;
 
-    if(message){
-        myMessage = message;
+    if (message) {
+        myMessage = message.map(msg => (
+            <div key={msg.id}>
+                {msg.firstname}
+            </div>
+        ));
     }
 
     return (
         <div className={classes.PDBoard} >
             <h4>PD Board</h4>
-            <h3>{myMessage}</h3>
+            {myMessage}
         </div>
     );
 }
