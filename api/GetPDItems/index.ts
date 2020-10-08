@@ -6,6 +6,7 @@ const httpTrigger: AzureFunction = async function(
   req: HttpRequest
 ): Promise<void> {
   try {
+
     const client = new CosmosClient(process.env.CONNECTION_STRING);
 
     const database = client.database("SampleDB");
