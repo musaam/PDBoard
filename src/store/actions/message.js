@@ -3,7 +3,7 @@ import axiosInstance from '../../axiosInstance';
 export const getMessage = () => {
     return dispatch => {
         dispatch({type: 'GET_MESSAGE_START'});
-        axiosInstance.get('http://localhost:7071/api/pditems')
+        axiosInstance.get('/api/pditems')
             .then(response => {
                 const body = response.data;
                 dispatch({
