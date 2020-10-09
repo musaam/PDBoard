@@ -13,8 +13,7 @@ export const getPDItems = () => {
                 console.log(body);               
             })
             .catch(error => {
-                dispatch({type: 'GET_PDITEMS_FAIL'});
-                console.log('errorrrr');
+                dispatch({type: 'GET_PDITEMS_FAIL'});               
                 console.log(error);
             });
     }
