@@ -7,10 +7,10 @@ import * as serviceWorker from './serviceWorker';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider} from 'react-redux';
 import thunk from 'redux-thunk';
-import messageReducer from './store/reducers/message';
+import pdItemReducer from './store/reducers/pdItem';
 
 const rootReducer = combineReducers({
-  message: messageReducer
+  pdItem: pdItemReducer
 });
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;

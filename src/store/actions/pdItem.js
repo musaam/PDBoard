@@ -1,19 +1,19 @@
 import axiosInstance from '../../axiosInstance';
 
-export const getMessage = () => {
+export const getPDItems = () => {
     return dispatch => {
-        dispatch({type: 'GET_MESSAGE_START'});
+        dispatch({type: 'GET_PDITEMS_START'});
         axiosInstance.get('/api/pditems')
             .then(response => {
                 const body = response.data;
                 dispatch({
-                    type: 'GET_MESSAGE_SUCCESS',
-                    message: body
+                    type: 'GET_PDITEMS_SUCCESS',
+                    pdItems: body
                 });
                 console.log(body);               
             })
             .catch(error => {
-                dispatch({type: 'GET_MESSAGE_FAIL'});
+                dispatch({type: 'GET_PDITEMS_FAIL'});
                 console.log('errorrrr');
                 console.log(error);
             });

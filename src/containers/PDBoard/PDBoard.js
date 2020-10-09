@@ -3,35 +3,36 @@ import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionCreators from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import SimpleRating from '../../components/UI/Rating/SimpleRating';
 
 const PDBoard = (props) => {
 
     const dispatch = useDispatch();
 
-    const onGetMessage = useCallback(() => dispatch(actionCreators.getMessage()), [dispatch]);
+    const onGetPDItems = useCallback(() => dispatch(actionCreators.getPDItems()), [dispatch]);
 
-    const message = useSelector(state => state.message.message);
-    const loading = useSelector(state => state.message.loading);
+    const pdItems = useSelector(state => state.pdItem.pdItems);
+    const loading = useSelector(state => state.pdItem.loading);
 
     useEffect(() => {
-        onGetMessage();
-        console.log('board loaded');
-    }, [onGetMessage]);
+        onGetPDItems();     
+    }, [onGetPDItems]);
 
-    let myMessage = loading ? <Spinner /> : null;
+    let items = loading ? <Spinner /> : null;
 
-    if (message) {
-        myMessage = message.map(msg => (
-            <div key={msg.id}>
-                {msg.firstname}
+    if (pdItems) {
+        items = pdItems.map(pdi => (
+            <div className={classes.PDBoard} key={pdi.id}>
+                <div>{pdi.title}</div>    
+                <div>{pdi.author}</div>                
+                <SimpleRating value={pdi.rating} />     
             </div>
         ));
     }
 
     return (
-        <div className={classes.PDBoard} >
-            <h4>PD Board</h4>
-            {myMessage}
+        <div>           
+            {items}
         </div>
     );
 }
