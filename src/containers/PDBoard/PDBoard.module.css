@@ -8,9 +8,50 @@
     box-sizing: border-box;
 }
 
+.PDCard {   
+    margin: 20px auto;
+    width: 80%;
+    text-align: center;    
+}
+
+.PDTitle {
+    color: #0078D4;
+    cursor: pointer;
+    text-decoration: none;
+    word-wrap: break-word;
+    font-weight: bold;
+}
+
+.PDTitle:hover {
+    text-decoration: underline;
+}
+
+.PDCardHeader {
+    background-color: #DC1E35;
+}
+
+.PDCardAction {
+    display: 'flex';
+    justify-content: center;
+    flex-wrap: wrap;   
+}
+
+.PDCardRating {
+    margin-top: 10px;
+}
+
+.Ratings {
+    vertical-align: super;
+    font-size: small;
+    margin-left: 10px;
+}
+
 
 @media (min-width: 600px) {
     .PDBoard {
+        width: 500px;
+    }
+    .PDCard {
         width: 500px;
     }
 }
