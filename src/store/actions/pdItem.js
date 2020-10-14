@@ -3,17 +3,34 @@ import axiosInstance from '../../axiosInstance';
 export const getPDItems = () => {
     return dispatch => {
         dispatch({type: 'GET_PDITEMS_START'});
-        axiosInstance.get('/api/pditems')
+        axiosInstance.get('http://localhost:7071/api/pditems')
             .then(response => {
                 const body = response.data;
                 dispatch({
                     type: 'GET_PDITEMS_SUCCESS',
                     pdItems: body
-                });
-                console.log(body);               
+                });               
             })
             .catch(error => {
-                dispatch({type: 'GET_PDITEMS_FAIL'});               
+                dispatch({type: 'GET_PDITEMS_FAIL'});
+                console.log(error);
+            });
+    }
+}
+
+export const createPDItem = (pdItem) => {
+    return dispatch => {
+        dispatch({type: 'CREATE_PDITEM_START'});
+        axiosInstance.post('http://localhost:7071/api/pditem', pdItem)
+            .then(response => {   
+                console.log(response);            
+                dispatch({
+                    type: 'CREATE_PDITEM_SUCCESS',
+                    pdItem: pdItem                   
+                });
+            })
+            .catch(error => {
+                dispatch({type: 'CREATE_PDITEM_FAIL'});
                 console.log(error);
             });
     }

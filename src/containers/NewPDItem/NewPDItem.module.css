@@ -1,0 +1,29 @@
+.NewPDItem {   
+    margin: 20px auto;
+    width: 80%;
+    text-align: center;    
+}
+
+
+.NewPDItemHeader {
+    background-color: #DC1E35;
+    color: white;
+    font-weight: bold;
+}
+
+.NewPDItemAction {
+    display: 'flex';
+    justify-content: center;
+    flex-wrap: wrap;   
+}
+
+.NewPDItemRating {
+    margin-top: 10px;
+}
+
+
+@media (min-width: 600px) {    
+    .NewPDItem {
+        width: 700px;
+    }
+}
