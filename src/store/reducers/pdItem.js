@@ -5,10 +5,11 @@ const initialState = {
     loading: false
 };
 
-const createPDItemSuccess = (state, action) => {   
+const createPDItemSuccess = (state, action) => { 
+    const newPDItem = updateObject(action.pdItem, { id: action.pdItemId });  
     const updatedState = {
         loading: false,      
-        pdItems: state.pdItems.concat(action.pdItem)
+        pdItems: state.pdItems.concat(newPDItem)
     }
     return updateObject(state, updatedState)
 }

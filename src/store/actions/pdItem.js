@@ -3,7 +3,7 @@ import axiosInstance from '../../axiosInstance';
 export const getPDItems = () => {
     return dispatch => {
         dispatch({type: 'GET_PDITEMS_START'});
-        axiosInstance.get('/api/pditems')
+        axiosInstance.get('http://localhost:7071/api/pditems')
             .then(response => {
                 const body = response.data;
                 dispatch({
@@ -21,12 +21,12 @@ export const getPDItems = () => {
 export const createPDItem = (pdItem) => {
     return dispatch => {
         dispatch({type: 'CREATE_PDITEM_START'});
-        axiosInstance.post('/api/pditem', pdItem)
-            .then(response => {   
-                console.log(response);            
+        axiosInstance.post('http://localhost:7071/api/pditem', pdItem)
+            .then(response => {                  
                 dispatch({
                     type: 'CREATE_PDITEM_SUCCESS',
-                    pdItem: pdItem                   
+                    pdItem: pdItem,
+                    pdItemId: response.data.id                   
                 });
             })
             .catch(error => {
