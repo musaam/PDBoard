@@ -11,10 +11,13 @@ const httpTrigger: AzureFunction = async function(
     const database = client.database("SampleDB");
     const container = database.container("PDItems");
 
-    const author = req.body.author;
     const id = req.params.id;
+    const author = req.params.author;
 
-    const result = await container.item(id, author.name).delete();
+    console.log(id);
+    console.log(author);
+
+    const result = await container.item(id, author).delete();
 
     context.res = {
       body: result.resource

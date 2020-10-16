@@ -3,23 +3,31 @@ import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionCreators from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import SimpleRating from '../../components/UI/Rating/SimpleRating';
-import { Card, CardContent, CardHeader, CardActions, Chip, IconButton } from '@material-ui/core';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import SimpleRating from '../../components/UI/Material/Rating/SimpleRating';
+import { Card, CardContent, CardHeader, CardActions, Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import DropdownMenu from '../../components/UI/Material/Menu/DropdownMenu';
 
 const useStyles = makeStyles((theme) => ({
     cardHeader: {
-      paddingTop: 5, 
-      paddingBottom: 5
-    },   
-  }));
+        paddingTop: 5,
+        paddingBottom: 5
+    },
+}));
 
-const PDBoard = (props) => {
+
+
+const PDBoard = (props) => {  
 
     const dispatch = useDispatch();
 
     const onGetPDItems = useCallback(() => dispatch(actionCreators.getPDItems()), [dispatch]);
+
+    const onRateItem = (pdItemId) => {
+        console.log(pdItemId);
+    }
+
+    const onDeletePDItem = (pdItemId, author) => dispatch(actionCreators.deletePDItem(pdItemId, author));
 
     const pdItems = useSelector(state => state.pdItem.pdItems);
     const loading = useSelector(state => state.pdItem.loading);
@@ -27,6 +35,12 @@ const PDBoard = (props) => {
     useEffect(() => {
         onGetPDItems();
     }, [onGetPDItems]);
+
+    const pdCardMenuOptions = [
+        {title: 'Rate', iconName: 'grade', clicked: onRateItem},
+        {title: 'Edit', iconName: 'edit', clicked: onRateItem},
+        {title: 'Delete', iconName: 'delete', clicked: onDeletePDItem}
+    ]
 
     const materialClasses = useStyles();
 
@@ -37,12 +51,14 @@ const PDBoard = (props) => {
             let tags = pdi.tags.map(tag => <Chip label={tag} key={tag}></Chip>);
             return (
                 <Card className={classes.PDCard} key={pdi.id}>
-                    <CardHeader className={[materialClasses.cardHeader, classes.PDCardHeader].join(' ') }                    
-                     action={
-                         <IconButton aria-label="settings">
-                             <MoreVertIcon style={{ color: "white"}} />
-                         </IconButton>
-                     } 
+                    <CardHeader className={[materialClasses.cardHeader, classes.PDCardHeader].join(' ')}
+                        action={
+                            <DropdownMenu 
+                                options={pdCardMenuOptions} 
+                                itemId={pdi.id}
+                                author={pdi.author} 
+                                iconStyle={{ color: "white"}} /> 
+                        }
                     />
                     <CardContent>
                         <div><a className={classes.PDTitle} href={pdi.weblink} target="_blank" rel='noopener noreferrer'>{pdi.title}</a></div>
@@ -53,7 +69,7 @@ const PDBoard = (props) => {
                         </div>
                     </CardContent>
                     <CardActions className={classes.PDCardAction}>
-                       {tags}
+                        {tags}
                     </CardActions>
                 </Card>
             );
