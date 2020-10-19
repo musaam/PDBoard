@@ -27,7 +27,8 @@
 }
 
 .PDCardHeader {
-    background-color: #DC1E35;
+    /* background-color: #DC1E35; */
+    color: white;
 }
 
 .PDCardAction {
