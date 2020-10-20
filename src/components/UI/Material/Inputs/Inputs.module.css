@@ -3,3 +3,20 @@
     padding: 10px;
     box-sizing: border-box;
 }
+
+.Label {
+    margin-right: 15px;
+    font-weight: 400;
+    color: grey;
+}
+
+.Field {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: silver;
+    border-width: 0.5px;
+    border-style: solid;
+    border-radius: 5px;
+}

@@ -52,7 +52,7 @@ const NewPDItem = (props) => {
             validation: {
                 required: false
             },
-            valid: false,
+            valid: true,
             touched: false
         },
         weblink: {
@@ -66,26 +66,24 @@ const NewPDItem = (props) => {
             validation: {
                 required: false
             },
-            valid: false,
+            valid: true,
             touched: false
         },
         rating: {
-            elementType: 'input',
+            elementType: 'rating',
             elementConfig: {
                 type: 'number',
                 label: 'Rating',
                 helperText: 'Rating range is 1-5',
                 fullWidth: true
             },
-            value: '',
+            value: 0,
             validation: {
-                required: true,
-                minValue: 1,
-                maxValue: 5
+                required: false,               
             },
-            valid: false,
+            valid: true,
             touched: false
-        },
+        }, 
         tags: {
             elementType: 'tags',
             elementConfig: {
@@ -98,8 +96,8 @@ const NewPDItem = (props) => {
                 required: false
             },
             valid: true,
-            touched: true
-        }
+            touched: false
+        } 
     });
 
     const [formIsValid, setFormIsValid] = useState(false);
@@ -126,8 +124,7 @@ const NewPDItem = (props) => {
 
     };
 
-    const inputChangedHandler = (event, formElementId) => {
-
+    const inputChangedHandler = (event, formElementId) => {             
         if (formElementId === 'tags') {
             let formIsValid = true;
 
@@ -139,10 +136,11 @@ const NewPDItem = (props) => {
             
         }
         else {
+            var val = formElementId === 'rating' ? event : event.target.value;
             var updatedFormElement = updateObject(pdItemForm[formElementId], {
-                value: event.target.value,
+                value: val,
                 touched: true,
-                valid: checkValidity(event.target.value, pdItemForm[formElementId].validation)
+                valid: checkValidity(val, pdItemForm[formElementId].validation)
             });
     
             var updatedPDItemForm = updateObject(pdItemForm, {

@@ -5,6 +5,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import Checkbox from '@material-ui/core/Checkbox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import ReactStars from 'react-stars';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -22,7 +23,7 @@ const Inputs = (props) => {
 
     switch (props.elementType) {
         case ('input'):
-            inputElement = <TextField 
+            inputElement = <TextField
                 {...props.elementConfig}
                 value={props.value}
                 required={props.required}
@@ -33,7 +34,7 @@ const Inputs = (props) => {
         case ('tags'):
             inputElement = (
                 <Autocomplete
-                    multiple                   
+                    multiple
                     options={top100Films}
                     disableCloseOnSelect
                     getOptionLabel={(option) => option}
@@ -57,6 +58,18 @@ const Inputs = (props) => {
                     )}
                 />
             )
+            break;
+        case ('rating'):
+            inputElement = (
+            <div className={classes.Field}>
+                <span className={classes.Label} >Rating</span>
+                <ReactStars
+                    value={props.value}
+                    onChange={props.changed}
+                    size={24}
+                    color2="#ffb400" 
+                    color1="silver"/>
+            </div>)
             break;
         default:
             inputElement = <TextField

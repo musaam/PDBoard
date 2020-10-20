@@ -21,7 +21,7 @@ export const getPDItems = () => {
 export const createPDItem = (pdItem) => {
     return dispatch => {
         dispatch({type: 'CREATE_PDITEM_START'});
-        axiosInstance.post('/api/pditem', pdItem)
+        axiosInstance.post('http://localhost:7071/api/pditem', pdItem)
             .then(response => {                  
                 dispatch({
                     type: 'CREATE_PDITEM_SUCCESS',
@@ -39,7 +39,7 @@ export const createPDItem = (pdItem) => {
 export const deletePDItem = (pdItemId, author) => {    
     return dispatch => {
         dispatch({type: 'DELETE_PDITEM_START'});
-        axiosInstance.delete(`/api/pditem/${pdItemId}/${author}`)
+        axiosInstance.delete(`http://localhost:7071/api/pditem/${pdItemId}/${author}`)
             .then(response => {                  
                 dispatch({
                     type: 'DELETE_PDITEM_SUCCESS',                    
