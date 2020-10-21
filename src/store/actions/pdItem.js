@@ -3,7 +3,7 @@ import axiosInstance from '../../axiosInstance';
 export const getPDItems = () => {
     return dispatch => {
         dispatch({type: 'GET_PDITEMS_START'});
-        axiosInstance.get('http://localhost:7071/api/pditems')
+        axiosInstance.get('/api/pditems')
             .then(response => {
                 const body = response.data;
                 dispatch({
