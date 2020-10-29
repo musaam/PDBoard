@@ -79,11 +79,11 @@ const NewPDItem = (props) => {
             },
             value: 0,
             validation: {
-                required: false,               
+                required: false,
             },
             valid: true,
             touched: false
-        }, 
+        },
         tags: {
             elementType: 'tags',
             elementConfig: {
@@ -91,13 +91,13 @@ const NewPDItem = (props) => {
                 label: 'Tags',
                 fullWidth: true
             },
-            value: '',
+            value: [],
             validation: {
                 required: false
             },
             valid: true,
             touched: false
-        } 
+        }
     });
 
     const [formIsValid, setFormIsValid] = useState(false);
@@ -112,11 +112,10 @@ const NewPDItem = (props) => {
         const formData = {};
 
         for (let formElementId in pdItemForm) {
-            formData[formElementId] = pdItemForm[formElementId].elementConfig.type === 'number' ? +pdItemForm[formElementId].value :   pdItemForm[formElementId].value;
+            formData[formElementId] = pdItemForm[formElementId].elementConfig.type === 'number' ? +pdItemForm[formElementId].value : pdItemForm[formElementId].value;
         }
 
         formData["ratings"] = 1;
-        formData["tags"] = ["Dummy1", "Dummy2"];
 
         onAddPDItem(formData);
 
@@ -124,42 +123,36 @@ const NewPDItem = (props) => {
 
     };
 
-    const inputChangedHandler = (event, formElementId) => {             
+    const inputChangedHandler = (event, newValue, formElementId) => {
+        let val;
         if (formElementId === 'tags') {
-            let formIsValid = true;
-
-            for (let inputId in pdItemForm) {
-                formIsValid = formIsValid && pdItemForm[inputId].valid;
-            }
-
-            setFormIsValid(formIsValid);
-            
-        }
-        else {
-            var val = formElementId === 'rating' ? event : event.target.value;
-            var updatedFormElement = updateObject(pdItemForm[formElementId], {
-                value: val,
-                touched: true,
-                valid: checkValidity(val, pdItemForm[formElementId].validation)
-            });
-    
-            var updatedPDItemForm = updateObject(pdItemForm, {
-                [formElementId]: updatedFormElement
-            });
-    
-            let formIsValid = true;
-    
-            for (let inputId in updatedPDItemForm) {
-                formIsValid = formIsValid && updatedPDItemForm[inputId].valid;
-            }
-    
-            setPDItemForm(updatedPDItemForm);
-            setFormIsValid(formIsValid);
+            val = newValue;         
+        } else if (formElementId === 'rating') {
+            val = event;
+        } else {
+            val = event.target.value;
         }
 
-        
+
+        var updatedFormElement = updateObject(pdItemForm[formElementId], {
+            value: val,
+            touched: true,
+            valid: checkValidity(val, pdItemForm[formElementId].validation)
+        });
+
+        var updatedPDItemForm = updateObject(pdItemForm, {
+            [formElementId]: updatedFormElement
+        });
+
+        let formIsValid = true;
+
+        for (let inputId in updatedPDItemForm) {
+            formIsValid = formIsValid && updatedPDItemForm[inputId].valid;
+        }
+
+        setPDItemForm(updatedPDItemForm);
+        setFormIsValid(formIsValid);
     }
-
 
     const formElementArray = [];
     for (let key in pdItemForm) {
@@ -180,7 +173,7 @@ const NewPDItem = (props) => {
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
-            changed={(event) => inputChangedHandler(event, formElement.id)} />
+            changed={(event, newValue) => inputChangedHandler(event, newValue, formElement.id)} />
         )
     });
 

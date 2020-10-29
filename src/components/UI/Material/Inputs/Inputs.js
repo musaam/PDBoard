@@ -10,7 +10,7 @@ import ReactStars from 'react-stars';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const top100Films = [
+const pdItemTags = [
     'Frontend',
     'Backend',
     '.Net',
@@ -34,10 +34,11 @@ const Inputs = (props) => {
         case ('tags'):
             inputElement = (
                 <Autocomplete
-                    multiple
-                    options={top100Films}
+                    multiple                    
+                    options={pdItemTags}
                     disableCloseOnSelect
-                    getOptionLabel={(option) => option}
+                    onChange={props.changed}                              
+                    getOptionLabel={(option) => option}                   
                     renderOption={(option, { selected }) => (
                         <React.Fragment>
                             <Checkbox
@@ -52,8 +53,7 @@ const Inputs = (props) => {
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            {...props.elementConfig}
-                            value={props.value}
+                            {...props.elementConfig}                            
                             variant="outlined" />
                     )}
                 />
