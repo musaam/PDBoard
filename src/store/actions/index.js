@@ -1,5 +1,7 @@
 export {
     getPDItems,
     createPDItem,
-    deletePDItem 
+    deletePDItem,
+    selectPDItem,
+    updatePDItem 
 } from './pdItem';

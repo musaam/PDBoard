@@ -37,6 +37,7 @@ const Inputs = (props) => {
                     multiple                    
                     options={pdItemTags}
                     disableCloseOnSelect
+                    value={props.value}
                     onChange={props.changed}                              
                     getOptionLabel={(option) => option}                   
                     renderOption={(option, { selected }) => (

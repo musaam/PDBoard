@@ -3,14 +3,14 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import Layout from './hoc/Layout/Layout';
 import './App.css';
 import PDBoard from './containers/PDBoard/PDBoard';
-import NewPDItem from './containers/NewPDItem/NewPDItem';
+import PDItem from './containers/PDItem/PDItem';
 
 function App() {
 
   let routes = (
     <Switch>     
       <Route path="/" exact component={PDBoard} /> 
-      <Route path="/newpditem" exact component={NewPDItem} />
+      <Route path="/pditem" exact component={PDItem} />
       <Redirect to="/" />
     </Switch>
   );

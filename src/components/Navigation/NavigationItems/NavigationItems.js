@@ -4,8 +4,7 @@ import NavigationItem from './NavigationItem/NavigationItem';
 
 const NavigationItems = (props) => (
     <ul className={classes.NavigationItems}>
-        <NavigationItem link="/" exact> PD Board </NavigationItem>
-        <NavigationItem link="/newpditem" exact> Add PD Item </NavigationItem>     
+        <NavigationItem link="/" exact> PD Board </NavigationItem>           
         { !props.isAuthenticated ?
             <NavigationItem link="/auth" > Login </NavigationItem> :
             <NavigationItem link="/logout" > Logout </NavigationItem>

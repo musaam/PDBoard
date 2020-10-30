@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import * as actionCreators from '../../store/actions/index';
-import classes from './NewPDItem.module.css';
+import classes from './PDItem.module.css';
 import { updateObject, checkValidity } from '../../shared/utility';
 import Inputs from '../../components/UI/Material/Inputs/Inputs';
 
-import { Card, CardContent, CardHeader, CardActions, Button } from '@material-ui/core';
+import { Card, CardContent, CardHeader, CardActions } from '@material-ui/core';
+import { CancelButton, PrimaryButton } from '../../components/UI/Material/Buttons/Buttons';
 
 
-const NewPDItem = (props) => {
+const PDItem = (props) => {    
+
+    const selectedPDItem = useSelector(state => state.pdItem.selectPDItem);
 
     const [pdItemForm, setPDItemForm] = useState({
         title: {
@@ -18,11 +22,11 @@ const NewPDItem = (props) => {
                 label: 'Title',
                 fullWidth: true
             },
-            value: '',
+            value: selectedPDItem == null ? '' : selectedPDItem.title,
             validation: {
                 required: true
             },
-            valid: false,
+            valid: selectedPDItem !== null,
             touched: false
         },
         author: {
@@ -32,11 +36,11 @@ const NewPDItem = (props) => {
                 label: 'Author',
                 fullWidth: true
             },
-            value: '',
+            value: selectedPDItem == null ? '' : selectedPDItem.author,
             validation: {
                 required: true
             },
-            valid: false,
+            valid: selectedPDItem !== null,
             touched: false
         },
         description: {
@@ -48,7 +52,7 @@ const NewPDItem = (props) => {
                 rows: 4,
                 fullWidth: true
             },
-            value: '',
+            value: selectedPDItem == null ? '' : selectedPDItem.description,
             validation: {
                 required: false
             },
@@ -62,7 +66,7 @@ const NewPDItem = (props) => {
                 label: 'Weblink',
                 fullWidth: true
             },
-            value: '',
+            value: selectedPDItem == null ? '' : selectedPDItem.weblink,
             validation: {
                 required: false
             },
@@ -77,7 +81,7 @@ const NewPDItem = (props) => {
                 helperText: 'Rating range is 1-5',
                 fullWidth: true
             },
-            value: 0,
+            value: selectedPDItem == null ? 0 : selectedPDItem.rating,
             validation: {
                 required: false,
             },
@@ -91,7 +95,7 @@ const NewPDItem = (props) => {
                 label: 'Tags',
                 fullWidth: true
             },
-            value: [],
+            value: selectedPDItem == null ? [] : selectedPDItem.tags,
             validation: {
                 required: false
             },
@@ -106,7 +110,17 @@ const NewPDItem = (props) => {
 
     const onAddPDItem = (pdItem) => dispatch(actionCreators.createPDItem(pdItem));
 
-    const addItemHandler = (event) => {
+    const onUpdatePDItem = (pdItem) => dispatch(actionCreators.updatePDItem(pdItem));
+
+    const history = useHistory();    
+
+    const cancelHandler = (event) => {
+        event.preventDefault();
+
+        history.push("/");
+    }
+
+    const upsertItemHandler = (event) => {
         event.preventDefault();
 
         const formData = {};
@@ -117,16 +131,16 @@ const NewPDItem = (props) => {
 
         formData["ratings"] = 1;
 
-        onAddPDItem(formData);
+        selectedPDItem == null ? onAddPDItem(formData) : onUpdatePDItem(formData);
 
-        props.history.push('/');
+        history.push("/");
 
     };
 
     const inputChangedHandler = (event, newValue, formElementId) => {
         let val;
         if (formElementId === 'tags') {
-            val = newValue;         
+            val = newValue;
         } else if (formElementId === 'rating') {
             val = event;
         } else {
@@ -178,23 +192,28 @@ const NewPDItem = (props) => {
     });
 
     return (
-        <form onSubmit={addItemHandler}>
+        <form>
             <Card className={classes.NewPDItem}>
                 <CardHeader className={classes.NewPDItemHeader}
-                    title="New PD Item">
+                    title={selectedPDItem == null ? "Add PD Item" : "Edit PD Item"}>
 
                 </CardHeader>
                 <CardContent>{formBody}</CardContent>
                 <CardActions className={classes.NewPDItemAction}>
-                    <Button
-                        onClick={addItemHandler}
+                    <CancelButton
+                        onClick={cancelHandler}                      
+                        variant="contained"                       
+                    >
+                        CANCEL
+                    </CancelButton>
+                    <PrimaryButton
+                        onClick={upsertItemHandler}
                         disabled={!formIsValid}
                         variant="contained"
-                        color="primary"
-                        className={classes.button}
+                        color="primary"                        
                     >
                         SUBMIT
-                </Button>
+                </PrimaryButton>
                 </CardActions>
             </Card>
         </form>
@@ -202,4 +221,4 @@ const NewPDItem = (props) => {
     );
 };
 
-export default NewPDItem;
+export default PDItem;

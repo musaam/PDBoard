@@ -1,5 +1,6 @@
 import classes from './PDBoard.module.css';
 import React, { useEffect, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionCreators from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
@@ -52,12 +53,15 @@ const PDBoard = (props) => {
 
     const [expanded, setExpanded] = React.useState(false);
 
+    const history = useHistory();
+
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
-    const onEditItem = () => {
-        console.log('edit item');
+    const onEditItem = (pdItemId) => {
+        dispatch(actionCreators.selectPDItem(pdItemId));
+        history.push('/pditem');
     };
 
     const onRateItem = (pdItemId) => {
@@ -95,8 +99,8 @@ const PDBoard = (props) => {
     if (pdItems) {
         items = pdItems.map(pdi => {
             let tags = pdi.tags.map(tag => <Chip label={tag} key={tag}></Chip>);
-            let description = pdi.description == null 
-                ? null 
+            let description = pdi.description == null
+                ? null
                 : <Typography variant="body2" color="textSecondary" component="p">
                     {pdi.description}
                 </Typography>;
@@ -118,8 +122,8 @@ const PDBoard = (props) => {
                         title={<a className={classes.PDTitle} href={pdi.weblink} target="_blank" rel='noopener noreferrer'>{pdi.title}</a>}
                         subheader={pdi.author}
                     />
-                    <CardContent> 
-                        {description}                       
+                    <CardContent>
+                        {description}
                         <div className={classes.PDCardRating}>
                             <ReactStars className={classes.Rating}
                                 edit={false}
@@ -173,11 +177,11 @@ const PDBoard = (props) => {
                 onCancel={handleRateClose}
                 dialogTitle='Rate PD Item'
                 okTitle='Submit'>
-                <ReactStars                    
+                <ReactStars
                     onChange={ratingChanged}
                     size={24}
-                    color2="#ffb400" 
-                    color1="silver"/>
+                    color2="#ffb400"
+                    color1="silver" />
             </SimpleDialog>
 
         </div>
