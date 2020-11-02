@@ -129,12 +129,15 @@ const PDItem = (props) => {
             formData[formElementId] = pdItemForm[formElementId].elementConfig.type === 'number' ? +pdItemForm[formElementId].value : pdItemForm[formElementId].value;
         }
 
-        formData["ratings"] = 1;
-
-        selectedPDItem == null ? onAddPDItem(formData) : onUpdatePDItem(formData);
+        if(selectedPDItem == null){
+            formData["ratings"] = 1;
+            onAddPDItem(formData);
+        }else{
+            const updatedForm = updateObject(selectedPDItem, formData);
+            onUpdatePDItem(updatedForm);
+        }
 
         history.push("/");
-
     };
 
     const inputChangedHandler = (event, newValue, formElementId) => {
