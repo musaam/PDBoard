@@ -13,11 +13,10 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import GradeIcon from '@material-ui/icons/Grade';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SchoolIcon from '@material-ui/icons/School';
-import RateReviewIcon from '@material-ui/icons/RateReview';
-import SimpleDialog from '../../components/UI/Material/Modal/SimpleDialog';
+import RatingDialog from '../../components/RatingDialog/RatingDialog';
+import { updateObject } from '../../shared/utility';
 
 const useStyles = makeStyles((theme) => ({
     media: {
@@ -25,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: '56.25%', // 16:9
     },
     expand: {
+        marginLeft: 'auto',
+    },
+    expandIcon: {
         transform: 'rotate(0deg)',
         marginLeft: 'auto',
         transition: theme.transitions.create('transform', {
@@ -55,6 +57,14 @@ const PDBoard = (props) => {
 
     const history = useHistory();
 
+    const pdItems = useSelector(state => state.pdItem.pdItems);
+    const loading = useSelector(state => state.pdItem.loading);
+    const selectedPDItem = useSelector(state => state.pdItem.selectPDItem);
+
+    useEffect(() => {
+        onGetPDItems();
+    }, [onGetPDItems]);
+
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -62,36 +72,34 @@ const PDBoard = (props) => {
     const onEditItem = (pdItemId) => {
         dispatch(actionCreators.selectPDItem(pdItemId));
         history.push('/pditem');
-    };
+    };    
 
-    const onRateItem = (pdItemId) => {
-        console.log('rate item');
-    }
-
-    const ratingChanged = (newRating) => {
-        console.log(newRating);
-    };
-
-    const handleRateClickOpen = () => {
+    const onRatePDItem = (pdItemId) => {
+        dispatch(actionCreators.selectPDItem(pdItemId));
         setOpen(true);
-    };
-
-    const handleRateClose = (value) => {
-        setOpen(false);
     };
 
     const onDeletePDItem = (pdItemId, author) => dispatch(actionCreators.deletePDItem(pdItemId, author));
 
-    const pdItems = useSelector(state => state.pdItem.pdItems);
-    const loading = useSelector(state => state.pdItem.loading);
+    const onUpdatePDItem = (pdItem) => dispatch(actionCreators.updatePDItem(pdItem));
 
-    useEffect(() => {
-        onGetPDItems();
-    }, [onGetPDItems]);
+    const onRateItem = (newRating) => {
+        const newTotalRatings = selectedPDItem.ratings + 1;
+        const averageRating = (selectedPDItem.rating + newRating) / newTotalRatings;
+        const updatedItem = updateObject(selectedPDItem, {rating: averageRating, ratings: newTotalRatings});
+        onUpdatePDItem(updatedItem);   
+        handleRateClose();
+    }   
+
+    const handleRateClose = (value) => {
+        setOpen(false);
+    };   
+   
 
     const pdCardMenuOptions = [
-        { title: 'Edit', iconName: 'edit', clicked: onEditItem },
-        { title: 'Delete', iconName: 'delete', clicked: onDeletePDItem }
+        { title: 'Rate', iconName: 'grade', color: '#0078D4', clicked: onRatePDItem }, 
+        { title: 'Edit', iconName: 'edit', color: '#0078D4', clicked: onEditItem },       
+        { title: 'Delete', iconName: 'delete', color: 'red', clicked: onDeletePDItem }
     ]
 
     let items = loading ? <Spinner /> : null;
@@ -104,6 +112,15 @@ const PDBoard = (props) => {
                 : <Typography variant="body2" color="textSecondary" component="p">
                     {pdi.description}
                 </Typography>;
+            let rating = <div className={classes.PDCardRating}>
+                <ReactStars className={classes.Rating}
+                    edit={false}
+                    value={pdi.rating}
+                    size={24}
+                    color2="#ffb400"
+                    color1="silver" />
+                <span className={classes.Ratings}>({pdi.ratings.toLocaleString()} ratings)</span>
+            </div>
             return (
                 <Card key={pdi.id} className={classes.PDCard}>
                     <CardHeader className={[materialClasses.cardHeader, classes.PDCardHeader].join(' ')}
@@ -124,33 +141,22 @@ const PDBoard = (props) => {
                     />
                     <CardContent>
                         {description}
-                        <div className={classes.PDCardRating}>
-                            <ReactStars className={classes.Rating}
-                                edit={false}
-                                value={pdi.rating}
-                                size={24}
-                                color2="#ffb400"
-                                color1="silver" />
-                            <span className={classes.Ratings}>({pdi.ratings.toLocaleString()} ratings)</span>
-                        </div>
-                        {tags}
+                        <div className={classes.Tags} >{tags}</div>
                     </CardContent>
                     <CardActions disableSpacing>
-                        <IconButton aria-label="add rating" onClick={handleRateClickOpen} >
-                            <GradeIcon style={{ color: 'black' }} />
-                        </IconButton>
-                        <IconButton aria-label="add comment">
-                            <RateReviewIcon style={{ color: 'black' }} />
-                        </IconButton>
+                        {rating}                       
                         <IconButton
-                            className={clsx(materialClasses.expand, {
-                                [materialClasses.expandOpen]: expanded,
-                            })}
+                            className={materialClasses.expand}
                             onClick={handleExpandClick}
                             aria-expanded={expanded}
                             aria-label="show more"
                         >
-                            <ExpandMoreIcon style={{ color: 'black' }} />
+                            <span className={classes.ShowReviewText} >Show Reviews</span>
+                            <ExpandMoreIcon
+                                className={clsx(materialClasses.expand, {
+                                    [materialClasses.expandOpen]: expanded,
+                                })}
+                            />
                         </IconButton>
                     </CardActions>
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
@@ -170,19 +176,11 @@ const PDBoard = (props) => {
     return (
         <div>
             {items}
-            <SimpleDialog
-                open={open}
-                onClose={handleRateClose}
-                onOk={onRateItem}
-                onCancel={handleRateClose}
-                dialogTitle='Rate PD Item'
-                okTitle='Submit'>
-                <ReactStars
-                    onChange={ratingChanged}
-                    size={24}
-                    color2="#ffb400"
-                    color1="silver" />
-            </SimpleDialog>
+            <RatingDialog 
+                 open={open}
+                 onClose={handleRateClose}
+                 onOk={onRateItem}                
+            />
 
         </div>
     );

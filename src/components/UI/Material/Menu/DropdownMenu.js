@@ -51,9 +51,9 @@ const DropdownMenu = (props) => {
         {props.options.map((option) => (
           <MenuItem key={option.title} selected={option.title === props.defaultOption} onClick={() => menuClicked(option)}>
             <ListItemIcon>
-              <Icon fontSize="small">{option.iconName} </Icon>
+              <Icon style={{color: option.color}} fontSize="small">{option.iconName} </Icon>
             </ListItemIcon>
-            <ListItemText primary={option.title} />
+            <ListItemText primary={option.title} style={{color: option.color}} />
           </MenuItem>
         ))}
       </Menu>

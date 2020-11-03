@@ -72,6 +72,20 @@ const PDItem = (props) => {
             },
             valid: true,
             touched: false
+        },       
+        tags: {
+            elementType: 'tags',
+            elementConfig: {
+                type: 'text',
+                label: 'Tags',
+                fullWidth: true
+            },
+            value: selectedPDItem == null ? [] : selectedPDItem.tags,
+            validation: {
+                required: false
+            },
+            valid: true,
+            touched: false
         },
         rating: {
             elementType: 'rating',
@@ -88,20 +102,6 @@ const PDItem = (props) => {
             valid: true,
             touched: false
         },
-        tags: {
-            elementType: 'tags',
-            elementConfig: {
-                type: 'text',
-                label: 'Tags',
-                fullWidth: true
-            },
-            value: selectedPDItem == null ? [] : selectedPDItem.tags,
-            validation: {
-                required: false
-            },
-            valid: true,
-            touched: false
-        }
     });
 
     const [formIsValid, setFormIsValid] = useState(false);
