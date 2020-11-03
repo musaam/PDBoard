@@ -17,6 +17,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SchoolIcon from '@material-ui/icons/School';
 import RatingDialog from '../../components/RatingDialog/RatingDialog';
 import { updateObject } from '../../shared/utility';
+import ReviewCard from '../../components/ReviewCard/ReviewCard';
 
 const useStyles = makeStyles((theme) => ({
     media: {
@@ -65,7 +66,8 @@ const PDBoard = (props) => {
         onGetPDItems();
     }, [onGetPDItems]);
 
-    const handleExpandClick = () => {
+    const handleExpandClick = (pdItemId) => {
+        dispatch(actionCreators.selectPDItem(pdItemId));
         setExpanded(!expanded);
     };
 
@@ -107,20 +109,28 @@ const PDBoard = (props) => {
     if (pdItems) {
         items = pdItems.map(pdi => {
             let tags = pdi.tags.map(tag => <Chip label={tag} key={tag}></Chip>);
+
             let description = pdi.description == null
                 ? null
                 : <Typography variant="body2" color="textSecondary" component="p">
                     {pdi.description}
                 </Typography>;
-            let rating = <div className={classes.PDCardRating}>
-                <ReactStars className={classes.Rating}
-                    edit={false}
-                    value={pdi.rating}
-                    size={24}
-                    color2="#ffb400"
-                    color1="silver" />
-                <span className={classes.Ratings}>({pdi.ratings.toLocaleString()} ratings)</span>
-            </div>
+
+            let rating = (
+                <div className={classes.PDCardRating}>
+                    <ReactStars className={classes.Rating}
+                        edit={false}
+                        value={pdi.rating}
+                        size={24}
+                        color2="#ffb400"
+                        color1="silver" />
+                    <span className={classes.Ratings}>({pdi.ratings.toLocaleString()} ratings)</span>
+                </div>
+            );
+
+            let reviews = pdi.reviews == null ? <span>No reviews yet</span> : 
+                pdi.reviews.map(rv => <ReviewCard key={pdi.id} reviewer={rv.reviewer} rating={rv.rating} comment={rv.comment} />);
+
             return (
                 <Card key={pdi.id} className={classes.PDCard}>
                     <CardHeader className={[materialClasses.cardHeader, classes.PDCardHeader].join(' ')}
@@ -147,7 +157,7 @@ const PDBoard = (props) => {
                         {rating}                       
                         <IconButton
                             className={materialClasses.expand}
-                            onClick={handleExpandClick}
+                            onClick={() => handleExpandClick(pdi.id)}
                             aria-expanded={expanded}
                             aria-label="show more"
                         >
@@ -159,12 +169,9 @@ const PDBoard = (props) => {
                             />
                         </IconButton>
                     </CardActions>
-                    <Collapse in={expanded} timeout="auto" unmountOnExit>
-                        <CardContent>
-                            <Typography paragraph>Reviews:</Typography>
-                            <Typography paragraph>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                            </Typography>
+                    <Collapse in={expanded && selectedPDItem != null && pdi.id === selectedPDItem.id} timeout="auto" unmountOnExit>
+                        <CardContent>                           
+                            {reviews}
                         </CardContent>
                     </Collapse>
                 </Card>
