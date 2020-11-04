@@ -78,7 +78,7 @@ const RatingDialog = (props) => {
         ...newForm
     });
 
-    const [formIsValid, setFormIsValid] = useState(false);
+    //const [formIsValid, setFormIsValid] = useState(false);
 
     const inputChangedHandler = (event, newValue, formElementId) => {
         let val = formElementId === 'rating' ? event : event.target.value;
@@ -99,8 +99,7 @@ const RatingDialog = (props) => {
             formIsValid = formIsValid && updatedPDItemForm[inputId].valid;
         }
 
-        setPDItemForm(updatedPDItemForm);
-        setFormIsValid(formIsValid);
+        setPDItemForm(updatedPDItemForm);        
     }
 
     const formElementArray = [];
