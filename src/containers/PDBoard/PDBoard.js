@@ -85,11 +85,15 @@ const PDBoard = (props) => {
 
     const onUpdatePDItem = (pdItem) => dispatch(actionCreators.updatePDItem(pdItem));
 
-    const onRateItem = (newRating) => {
-        const newTotalRatings = selectedPDItem.ratings + 1;
-        const averageRating = (selectedPDItem.rating + newRating) / newTotalRatings;
-        const updatedItem = updateObject(selectedPDItem, {rating: averageRating, ratings: newTotalRatings});
-        onUpdatePDItem(updatedItem);   
+    const onRateItem = (review) => {
+        if(review['rating'] > 0 || review['comment'].trim().length > 0) {
+            const newTotalRatings = selectedPDItem.ratings + 1;
+            const averageRating = (selectedPDItem.rating + review['rating']) / newTotalRatings;
+            const reviews = review['comment'].trim().length > 0 ? selectedPDItem.reviews.concat(review) : selectedPDItem.reviews;
+            const updatedItem = updateObject(selectedPDItem, {rating: averageRating, ratings: newTotalRatings, reviews: reviews});
+            onUpdatePDItem(updatedItem);   
+        }
+      
         handleRateClose();
     }   
 
@@ -129,7 +133,9 @@ const PDBoard = (props) => {
             );
 
             let reviews = pdi.reviews == null ? <span>No reviews yet</span> : 
-                pdi.reviews.map(rv => <ReviewCard key={pdi.id} reviewer={rv.reviewer} rating={rv.rating} comment={rv.comment} />);
+                pdi.reviews.map(rv => <ReviewCard key={rv.reviewid} reviewer={rv.reviewer} rating={rv.rating} comment={rv.comment} />);
+
+            let reviewsCount =  pdi.reviews == null ? 0 : pdi.reviews.length;
 
             return (
                 <Card key={pdi.id} className={classes.PDCard}>
@@ -161,7 +167,7 @@ const PDBoard = (props) => {
                             aria-expanded={expanded}
                             aria-label="show more"
                         >
-                            <span className={classes.ShowReviewText} >Show Reviews</span>
+                            <span className={classes.ShowReviewText} >Reviews ({reviewsCount})</span>
                             <ExpandMoreIcon
                                 className={clsx(materialClasses.expand, {
                                     [materialClasses.expandOpen]: expanded,

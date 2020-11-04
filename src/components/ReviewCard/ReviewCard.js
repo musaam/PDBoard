@@ -45,7 +45,7 @@ export default function ReviewCard(props) {
                     <Grid item xs={12} sm container direction="column" className={classes.reviewGrid}>
                         <Grid item xs>
                             <Typography variant="subtitle2">
-                                {props.reviewer}
+                                {props.reviewer ? props.reviewer : "Anonymous"}
                             </Typography>
                             <ReactStars
                                 edit={false}

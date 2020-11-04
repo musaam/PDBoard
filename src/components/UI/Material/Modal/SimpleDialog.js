@@ -12,9 +12,9 @@ const SimpleDialog = (props) => {
  
 
   return (
-    <Dialog onClose={onClose} aria-labelledby="dialog-title" open={open}>
+    <Dialog fullWidth maxWidth={props.maxWidth}  onClose={onClose} aria-labelledby="dialog-title" open={open}>
         <DialogTitle id="dialog-title">{props.dialogTitle}</DialogTitle>
-        <DialogContent>
+        <DialogContent dividers>
             {props.children}
         </DialogContent>
         <DialogActions>
