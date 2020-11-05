@@ -36,3 +36,15 @@ export const checkValidity = (value, rules) => {
 
     return isValid;
 }
+
+export const pdItemTags = [
+    'Architecture',
+    'BA',
+    'Backend',
+    'Distributed Systems',
+    'Frontend',
+    'Leadership',
+    'QA',
+    '.Net'
+];
+

@@ -18,6 +18,7 @@ import SchoolIcon from '@material-ui/icons/School';
 import RatingDialog from '../../components/RatingDialog/RatingDialog';
 import { updateObject } from '../../shared/utility';
 import ReviewCard from '../../components/ReviewCard/ReviewCard';
+import PDItemsFilter from '../../components/PDItemsFilter/PDItemsFilter';
 
 const useStyles = makeStyles((theme) => ({
     media: {
@@ -42,11 +43,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-
 const PDBoard = (props) => {
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);    
 
     const dispatch = useDispatch();
 
@@ -58,6 +57,7 @@ const PDBoard = (props) => {
 
     const history = useHistory();
 
+    const tagFilter = useSelector(state => state.filter.tagFilter);
     const pdItems = useSelector(state => state.pdItem.pdItems);
     const loading = useSelector(state => state.pdItem.loading);
     const selectedPDItem = useSelector(state => state.pdItem.selectPDItem);
@@ -134,7 +134,7 @@ const PDBoard = (props) => {
     let items = loading ? <Spinner /> : null;
 
     if (pdItems) {
-        items = pdItems.map(pdi => {
+        items = pdItems.filter(pdi => tagFilter.length === 0 || pdi.tags.some(t => tagFilter.includes(t))).map(pdi => {
             let tags = pdi.tags.map(tag => <Chip label={tag} key={tag}></Chip>);
 
             let description = pdi.description == null
@@ -214,6 +214,7 @@ const PDBoard = (props) => {
 
     return (
         <div>
+            <PDItemsFilter />
             {items}
             <RatingDialog
                 open={open}

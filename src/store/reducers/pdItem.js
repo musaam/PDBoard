@@ -3,7 +3,7 @@ const { updateObject } = require("../../shared/utility");
 const initialState = {
     pdItems: null,
     loading: false,
-    selectPDItem: null
+    selectPDItem: null    
 };
 
 const createPDItemSuccess = (state, action) => { 

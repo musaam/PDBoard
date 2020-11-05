@@ -8,9 +8,11 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import pdItemReducer from './store/reducers/pdItem';
+import filterReducer from './store/reducers/filter';
 
 const rootReducer = combineReducers({
-  pdItem: pdItemReducer
+  pdItem: pdItemReducer,
+  filter: filterReducer
 });
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;

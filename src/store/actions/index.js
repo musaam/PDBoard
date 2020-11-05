@@ -3,5 +3,9 @@ export {
     createPDItem,
     deletePDItem,
     selectPDItem,
-    updatePDItem 
+    updatePDItem,     
 } from './pdItem';
+
+export {
+    updateTagFilter
+} from './filter';

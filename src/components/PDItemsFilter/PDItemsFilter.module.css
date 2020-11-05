@@ -1,0 +1,11 @@
+.PDItemsFilter {
+    margin: auto;
+    width: 80%;
+}
+
+
+@media (min-width: 600px) {
+    .PDItemsFilter {
+        width: 500px;
+    }  
+}

@@ -6,17 +6,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import ReactStars from 'react-stars';
+import { pdItemTags } from '../../../../shared/utility';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const pdItemTags = [
-    'Frontend',
-    'Backend',
-    '.Net',
-    'Distributed Systems',
-    'Architecture'
-];
 
 const Inputs = (props) => {
     let inputElement = null;
