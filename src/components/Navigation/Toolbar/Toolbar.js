@@ -7,11 +7,10 @@ import AddPDButton from '../../AddPDButton/AddPDButton';
 const Toolbar = (props) => (
     <header className={classes.Toolbar}>
         <DrawerToggle clicked={props.drawerToggleClicked} />
-        <AddPDButton />
-
         <nav className={classes.DesktopOnly}>
             <NavigationItems isAuthenticated={props.isAuthenticated} />
         </nav>
+        <AddPDButton />       
     </header>
 );
 
