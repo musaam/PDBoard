@@ -1,7 +1,7 @@
 import axiosInstance from '../../axiosInstance';
 
-const endpointBaseUrl = 'http://localhost:7071/api';
-//const endpointBaseUrl = '/api';
+//const endpointBaseUrl = 'http://localhost:7071/api';
+const endpointBaseUrl = '/api';
 
 export const getPDItems = () => {
     return dispatch => {
