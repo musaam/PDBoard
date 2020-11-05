@@ -39,12 +39,18 @@ export const checkValidity = (value, rules) => {
 
 export const pdItemTags = [
     'Architecture',
-    'BA',
+    'Automation Test',
     'Backend',
+    'Beginner',
+    'Book',
+    'Conference',
+    'Course',
     'Distributed Systems',
+    'Expert',
     'Frontend',
-    'Leadership',
-    'QA',
+    'Intermediate',
+    'Leadership',  
+    'Workshop', 
     '.Net'
 ];
 
