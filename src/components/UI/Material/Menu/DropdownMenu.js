@@ -22,7 +22,7 @@ const DropdownMenu = (props) => {
 
   const menuClicked = (option) => {
     handleClose();
-    option.clicked(props.itemId, props.author);
+    option.clicked(props.itemId, props.partitionkey);
   };
 
   return (

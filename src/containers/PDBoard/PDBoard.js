@@ -74,39 +74,62 @@ const PDBoard = (props) => {
     const onEditItem = (pdItemId) => {
         dispatch(actionCreators.selectPDItem(pdItemId));
         history.push('/pditem');
-    };    
+    };
 
     const onRatePDItem = (pdItemId) => {
         dispatch(actionCreators.selectPDItem(pdItemId));
         setOpen(true);
     };
 
-    const onDeletePDItem = (pdItemId, author) => dispatch(actionCreators.deletePDItem(pdItemId, author));
+    const onDeletePDItem = (pdItemId, partitionkey) => dispatch(actionCreators.deletePDItem(pdItemId, partitionkey));
 
     const onUpdatePDItem = (pdItem) => dispatch(actionCreators.updatePDItem(pdItem));
 
     const onRateItem = (review) => {
-        if(review['rating'] > 0 || review['comment'].trim().length > 0) {
-            const newTotalRatings = selectedPDItem.ratings + 1;
-            const averageRating = (selectedPDItem.rating + review['rating']) / newTotalRatings;
-            const reviews = review['comment'].trim().length > 0 ? selectedPDItem.reviews.concat(review) : selectedPDItem.reviews;
-            const updatedItem = updateObject(selectedPDItem, {rating: averageRating, ratings: newTotalRatings, reviews: reviews});
-            onUpdatePDItem(updatedItem);   
+        if (review['rating'] > 0 || review['comment'].trim().length > 0) {
+            const reviews = selectedPDItem.reviews.concat(review);
+            const updatedItem = updateObject(selectedPDItem, { reviews: reviews });
+            onUpdatePDItem(updatedItem);
         }
-      
+
         handleRateClose();
-    }   
+    }
 
     const handleRateClose = (value) => {
         setOpen(false);
-    };   
-   
+    };
+
 
     const pdCardMenuOptions = [
-        { title: 'Rate', iconName: 'grade', color: '#0078D4', clicked: onRatePDItem }, 
-        { title: 'Edit', iconName: 'edit', color: '#0078D4', clicked: onEditItem },       
+        { title: 'Rate', iconName: 'grade', color: '#0078D4', clicked: onRatePDItem },
+        { title: 'Edit', iconName: 'edit', color: '#0078D4', clicked: onEditItem },
         { title: 'Delete', iconName: 'delete', color: 'red', clicked: onDeletePDItem }
-    ]
+    ];
+
+    const calculateAverageRating = (reviews, ratingsCount) => {
+        if(reviews === []){
+            return 0;
+        }
+        
+        let ratedReviews = reviews.filter(rv => rv.rating !== null);
+
+        if(ratedReviews.length === 0){
+            return 0;
+        }
+
+        if(ratedReviews.length === 1){
+            return ratedReviews[0].rating;
+        }
+    
+        let total = 0;
+     
+        ratedReviews.forEach(r => {
+          total += r.rating;  
+        });
+       
+        return total / ratingsCount;
+
+    };
 
     let items = loading ? <Spinner /> : null;
 
@@ -120,22 +143,25 @@ const PDBoard = (props) => {
                     {pdi.description}
                 </Typography>;
 
+            let reviewsComments =  pdi.reviews.filter(rv => rv.comment !== null && rv.comment.trim().length > 0);
+            let reviewsCount =  reviewsComments.length;
+            let ratingsCount = pdi.reviews.filter(rv => rv.rating !== null).length;
+            let averageRating = calculateAverageRating(pdi.reviews, ratingsCount);
+
+            let reviews = reviewsCount === 0 ? <span>No reviews yet</span> :
+                reviewsComments.map(rv => <ReviewCard key={rv.reviewid} reviewer={rv.reviewer} rating={rv.rating} comment={rv.comment} />);
+
             let rating = (
                 <div className={classes.PDCardRating}>
                     <ReactStars className={classes.Rating}
                         edit={false}
-                        value={pdi.rating}
+                        value={averageRating}
                         size={24}
                         color2="#ffb400"
                         color1="silver" />
-                    <span className={classes.Ratings}>({pdi.ratings.toLocaleString()} ratings)</span>
+                    <span className={classes.Ratings}>({ratingsCount.toLocaleString()} ratings)</span>
                 </div>
-            );
-
-            let reviews = pdi.reviews == null ? <span>No reviews yet</span> : 
-                pdi.reviews.map(rv => <ReviewCard key={rv.reviewid} reviewer={rv.reviewer} rating={rv.rating} comment={rv.comment} />);
-
-            let reviewsCount =  pdi.reviews == null ? 0 : pdi.reviews.length;
+            );            
 
             return (
                 <Card key={pdi.id} className={classes.PDCard}>
@@ -149,7 +175,7 @@ const PDBoard = (props) => {
                             <DropdownMenu
                                 options={pdCardMenuOptions}
                                 itemId={pdi.id}
-                                author={pdi.author}
+                                partitionkey={pdi.partitionkey}
                                 iconStyle={{ color: "black" }} />
                         }
                         title={<a className={classes.PDTitle} href={pdi.weblink} target="_blank" rel='noopener noreferrer'>{pdi.title}</a>}
@@ -160,7 +186,7 @@ const PDBoard = (props) => {
                         <div className={classes.Tags} >{tags}</div>
                     </CardContent>
                     <CardActions disableSpacing>
-                        {rating}                       
+                        {rating}
                         <IconButton
                             className={materialClasses.expand}
                             onClick={() => handleExpandClick(pdi.id)}
@@ -176,7 +202,7 @@ const PDBoard = (props) => {
                         </IconButton>
                     </CardActions>
                     <Collapse in={expanded && selectedPDItem != null && pdi.id === selectedPDItem.id} timeout="auto" unmountOnExit>
-                        <CardContent>                           
+                        <CardContent>
                             {reviews}
                         </CardContent>
                     </Collapse>
@@ -189,10 +215,10 @@ const PDBoard = (props) => {
     return (
         <div>
             {items}
-            <RatingDialog 
-                 open={open}
-                 onClose={handleRateClose}
-                 onOk={onRateItem}                
+            <RatingDialog
+                open={open}
+                onClose={handleRateClose}
+                onOk={onRateItem}
             />
 
         </div>

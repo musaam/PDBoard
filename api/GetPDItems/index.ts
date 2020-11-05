@@ -9,8 +9,8 @@ const httpTrigger: AzureFunction = async function(
 
     const client = new CosmosClient(process.env.CONNECTION_STRING);
 
-    const database = client.database("SampleDB");
-    const container = database.container("PDItems");
+    const database = client.database("PdboardDB");
+    const container = database.container("ItemsContainer");
 
     let iterator = container.items.readAll();
     let { resources } = await iterator.fetchAll();

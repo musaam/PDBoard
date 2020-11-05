@@ -86,22 +86,7 @@ const PDItem = (props) => {
             },
             valid: true,
             touched: false
-        },
-        rating: {
-            elementType: 'rating',
-            elementConfig: {
-                type: 'number',
-                label: 'Rating',
-                helperText: 'Rating range is 1-5',
-                fullWidth: true
-            },
-            value: selectedPDItem == null ? 0 : selectedPDItem.rating,
-            validation: {
-                required: false,
-            },
-            valid: true,
-            touched: false
-        },
+        },      
     });
 
     const [formIsValid, setFormIsValid] = useState(false);
@@ -130,9 +115,11 @@ const PDItem = (props) => {
         }
 
         if(selectedPDItem == null){
-            formData["ratings"] = 1;
+            formData["reviews"] = [];
+            formData["partitionkey"] = formData["author"];
             onAddPDItem(formData);
-        }else{
+        }
+        else{
             const updatedForm = updateObject(selectedPDItem, formData);
             onUpdatePDItem(updatedForm);
         }
@@ -141,16 +128,8 @@ const PDItem = (props) => {
     };
 
     const inputChangedHandler = (event, newValue, formElementId) => {
-        let val;
-        if (formElementId === 'tags') {
-            val = newValue;
-        } else if (formElementId === 'rating') {
-            val = event;
-        } else {
-            val = event.target.value;
-        }
-
-
+        let val = formElementId === 'tags' ? newValue :  event.target.value;      
+      
         var updatedFormElement = updateObject(pdItemForm[formElementId], {
             value: val,
             touched: true,

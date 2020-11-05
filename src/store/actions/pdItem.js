@@ -1,7 +1,7 @@
 import axiosInstance from '../../axiosInstance';
 
-//const endpointBaseUrl = 'http://localhost:7071/api';
-const endpointBaseUrl = '/api';
+const endpointBaseUrl = 'http://localhost:7071/api';
+//const endpointBaseUrl = '/api';
 
 export const getPDItems = () => {
     return dispatch => {
@@ -39,10 +39,10 @@ export const createPDItem = (pdItem) => {
     }
 }
 
-export const deletePDItem = (pdItemId, author) => {
+export const deletePDItem = (pdItemId, partitionkey) => {
     return dispatch => {
         dispatch({ type: 'DELETE_PDITEM_START' });
-        axiosInstance.delete(`${endpointBaseUrl}/pditem/${pdItemId}/${author}`)
+        axiosInstance.delete(`${endpointBaseUrl}/pditem/${pdItemId}/${partitionkey}`)
             .then(response => {
                 dispatch({
                     type: 'DELETE_PDITEM_SUCCESS',

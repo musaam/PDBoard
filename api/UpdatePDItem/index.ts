@@ -8,13 +8,13 @@ const httpTrigger: AzureFunction = async function(
   try {
     const client = new CosmosClient(process.env.CONNECTION_STRING);
 
-    const database = client.database("SampleDB");
-    const container = database.container("PDItems");
+    const database = client.database("PdboardDB");
+    const container = database.container("ItemsContainer");
 
     const pdItem = req.body;
-    const { id, author } = pdItem;
+    const { id, partitionkey } = pdItem;
 
-    let { resource } = await container.item(id, author).replace(pdItem);
+    let { resource } = await container.item(id, partitionkey).replace(pdItem);
 
     context.res = {
       body: resource

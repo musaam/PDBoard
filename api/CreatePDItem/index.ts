@@ -8,8 +8,8 @@ const httpTrigger: AzureFunction = async function(
   try {
     const client = new CosmosClient(process.env.CONNECTION_STRING);
 
-    const database = client.database("SampleDB");
-    const container = database.container("PDItems");
+    const database = client.database("PdboardDB");
+    const container = database.container("ItemsContainer");
 
     const pdItemToCreate = req.body;
 
