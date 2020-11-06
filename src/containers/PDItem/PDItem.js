@@ -14,7 +14,7 @@ const PDItem = (props) => {
 
     const selectedPDItem = useSelector(state => state.pdItem.selectPDItem);
 
-    const [pdItemForm, setPDItemForm] = useState({
+    const newForm = {
         title: {
             elementType: 'input',
             elementConfig: {
@@ -98,7 +98,25 @@ const PDItem = (props) => {
             },
             valid: true,
             touched: false
+        },
+        addedBy: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'text',
+                label: 'Added By',
+                fullWidth: true
+            },
+            value: selectedPDItem == null ? '' : selectedPDItem.addedBy,
+            validation: {
+                required: false
+            },
+            valid: true,
+            touched: false
         },     
+    };
+
+    const [pdItemForm, setPDItemForm] = useState({
+        ...newForm
     });
 
     const [formIsValid, setFormIsValid] = useState(false);

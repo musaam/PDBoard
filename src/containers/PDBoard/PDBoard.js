@@ -138,10 +138,16 @@ const PDBoard = (props) => {
         items = pdItems.filter(pdi => tagFilter.length === 0 || pdi.tags.some(t => tagFilter.includes(t))).map(pdi => {
             let tags = pdi.tags.map(tag => <Chip label={tag} key={tag}></Chip>);
 
-            let description = pdi.description == null
+            let description = pdi.description == null || pdi.description.trim().length === 0
                 ? null
                 : <Typography variant="body2" color="textSecondary" component="p">
                     {pdi.description}
+                </Typography>;
+            
+            let addedBy = pdi.addedBy == null || pdi.addedBy.trim().length === 0
+                ? null
+                : <Typography variant="body2" color="textSecondary" component="p">
+                    Added By: {pdi.addedBy}
                 </Typography>;
 
             let reviewsComments =  pdi.reviews.filter(rv => rv.comment !== null && rv.comment.trim().length > 0);
@@ -189,6 +195,7 @@ const PDBoard = (props) => {
                     <CardContent>
                         {description}
                         <div className={classes.Tags} >{tags}</div>
+                        {addedBy}
                     </CardContent>
                     <CardActions disableSpacing>
                         {rating}
