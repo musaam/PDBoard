@@ -96,7 +96,7 @@ const PDItem = (props) => {
             validation: {
                 required: false
             },
-            valid: selectedPDItem !== null,
+            valid: true,
             touched: false
         },     
     });
