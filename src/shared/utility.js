@@ -38,16 +38,23 @@ export const checkValidity = (value, rules) => {
 }
 
 export const pdItemTags = [
+    'Agile',
     'Architecture',
     'Automation Test',
     'Backend',
     'Beginner',
     'Book',
+    'Business Architecture',
+    'Business Intelligence',
+    'Business Process Management',
+    'Business Data Analytics',
     'Conference',
     'Course',
+    'Cybersecurity',
     'Distributed Systems',
     'Expert',
     'Frontend',
+    'Information Technology',
     'Intermediate',
     'Leadership',  
     'Workshop', 
