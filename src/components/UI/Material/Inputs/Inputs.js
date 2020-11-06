@@ -7,6 +7,7 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import ReactStars from 'react-stars';
 import { pdItemTags } from '../../../../shared/utility';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -28,12 +29,12 @@ const Inputs = (props) => {
         case ('tags'):
             inputElement = (
                 <Autocomplete
-                    multiple                    
+                    multiple
                     options={pdItemTags}
                     disableCloseOnSelect
                     value={props.value}
-                    onChange={props.changed}                              
-                    getOptionLabel={(option) => option}                   
+                    onChange={props.changed}
+                    getOptionLabel={(option) => option}
                     renderOption={(option, { selected }) => (
                         <React.Fragment>
                             <Checkbox
@@ -48,7 +49,7 @@ const Inputs = (props) => {
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            {...props.elementConfig}                            
+                            {...props.elementConfig}
                             variant="outlined" />
                     )}
                 />
@@ -56,15 +57,25 @@ const Inputs = (props) => {
             break;
         case ('rating'):
             inputElement = (
-            <div className={classes.Field}>
-                <span className={classes.Label} >Rating</span>
-                <ReactStars
-                    value={props.value}
-                    onChange={props.changed}
-                    size={24}
-                    color2="#ffb400" 
-                    color1="silver"/>
-            </div>)
+                <div className={classes.Field}>
+                    <span className={classes.Label} >Rating</span>
+                    <ReactStars
+                        value={props.value}
+                        onChange={props.changed}
+                        size={24}
+                        color2="#ffb400"
+                        color1="silver" />
+                </div>)
+            break;
+        case ('checkbox'):
+            inputElement = (
+                <div className={classes.Field}>
+                    <FormControlLabel
+                        control={<Checkbox checked={props.value} onChange={props.changed} name="checkbox" />}
+                        {...props.elementConfig}
+                    />
+                </div>
+            )
             break;
         default:
             inputElement = <TextField

@@ -33,7 +33,7 @@ const PDItem = (props) => {
             elementType: 'input',
             elementConfig: {
                 type: 'text',
-                label: 'Author',
+                label: 'Author/Instructor',
                 fullWidth: true
             },
             value: selectedPDItem == null ? '' : selectedPDItem.author,
@@ -86,7 +86,19 @@ const PDItem = (props) => {
             },
             valid: true,
             touched: false
-        },      
+        }, 
+        isBook: {
+            elementType: 'checkbox',
+            elementConfig: {                
+                label: 'Book'              
+            },
+            value: selectedPDItem == null ? false : selectedPDItem.isBook,
+            validation: {
+                required: false
+            },
+            valid: selectedPDItem !== null,
+            touched: false
+        },     
     });
 
     const [formIsValid, setFormIsValid] = useState(false);
@@ -127,8 +139,8 @@ const PDItem = (props) => {
         history.push("/");
     };
 
-    const inputChangedHandler = (event, newValue, formElementId) => {
-        let val = formElementId === 'tags' ? newValue :  event.target.value;      
+    const inputChangedHandler = (event, newValue, formElementId) => {       
+        let val = formElementId === 'tags' || formElementId === 'isBook'  ? newValue :  event.target.value;      
       
         var updatedFormElement = updateObject(pdItemForm[formElementId], {
             value: val,

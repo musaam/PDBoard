@@ -26,6 +26,13 @@
     text-decoration: underline;
 }
 
+.PDTitleSpan {
+    color: #0078D4;    
+    text-decoration: none;
+    word-wrap: break-word;
+    font-weight: bold;
+}
+
 .PDCardHeader {
     /* background-color: #DC1E35; */
     color: white;

@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SchoolIcon from '@material-ui/icons/School';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 import RatingDialog from '../../components/RatingDialog/RatingDialog';
 import { updateObject } from '../../shared/utility';
 import ReviewCard from '../../components/ReviewCard/ReviewCard';
@@ -168,7 +169,9 @@ const PDBoard = (props) => {
                     <CardHeader className={[materialClasses.cardHeader, classes.PDCardHeader].join(' ')}
                         avatar={
                             <Avatar aria-label="pd" className={materialClasses.avatar}>
-                                <SchoolIcon style={{ color: 'white' }} />
+                                {pdi.isBook ? 
+                                    <MenuBookIcon style={{ color: 'white' }} /> : 
+                                    <SchoolIcon style={{ color: 'white' }} />} 
                             </Avatar>
                         }
                         action={
@@ -178,7 +181,9 @@ const PDBoard = (props) => {
                                 partitionkey={pdi.partitionkey}
                                 iconStyle={{ color: "black" }} />
                         }
-                        title={<a className={classes.PDTitle} href={pdi.weblink} target="_blank" rel='noopener noreferrer'>{pdi.title}</a>}
+                        title={pdi.weblink.trim().length > 0 ? 
+                                <a className={classes.PDTitle} href={pdi.weblink} target="_blank" rel='noopener noreferrer'>{pdi.title}</a> : 
+                                <span className={classes.PDTitleSpan}>{pdi.title}</span>}
                         subheader={pdi.author}
                     />
                     <CardContent>
