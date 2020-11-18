@@ -20,6 +20,10 @@ import RatingDialog from '../../components/RatingDialog/RatingDialog';
 import { updateObject } from '../../shared/utility';
 import ReviewCard from '../../components/ReviewCard/ReviewCard';
 import PDItemsFilter from '../../components/PDItemsFilter/PDItemsFilter';
+import MailTo from '../../components/MailTo/MailTo';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+
 
 const useStyles = makeStyles((theme) => ({
     media: {
@@ -42,11 +46,14 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         backgroundColor: '#DC1E35',
     },
+    sendRequest: {
+        backgroundColor: "#5D5C64"
+    },
 }));
 
 const PDBoard = (props) => {
 
-    const [open, setOpen] = React.useState(false);    
+    const [open, setOpen] = React.useState(false);
 
     const dispatch = useDispatch();
 
@@ -67,13 +74,13 @@ const PDBoard = (props) => {
         onGetPDItems();
     }, [onGetPDItems]);
 
-    const handleExpandClick = (pdItemId) => {       
+    const handleExpandClick = (pdItemId) => {
         setExpanded(
-            selectedPDItem === null 
-            || (selectedPDItem !== null && selectedPDItem.id !== pdItemId) 
+            selectedPDItem === null
+            || (selectedPDItem !== null && selectedPDItem.id !== pdItemId)
             || (selectedPDItem !== null && selectedPDItem.id === pdItemId && !expanded)
-        );        
-        dispatch(actionCreators.selectPDItem(pdItemId));      
+        );
+        dispatch(actionCreators.selectPDItem(pdItemId));
     };
 
     const onEditItem = (pdItemId) => {
@@ -112,26 +119,26 @@ const PDBoard = (props) => {
     ];
 
     const calculateAverageRating = (reviews, ratingsCount) => {
-        if(reviews === []){
+        if (reviews === []) {
             return 0;
         }
-        
+
         let ratedReviews = reviews.filter(rv => rv.rating !== null);
 
-        if(ratedReviews.length === 0){
+        if (ratedReviews.length === 0) {
             return 0;
         }
 
-        if(ratedReviews.length === 1){
+        if (ratedReviews.length === 1) {
             return ratedReviews[0].rating;
         }
-    
+
         let total = 0;
-     
+
         ratedReviews.forEach(r => {
-          total += r.rating;  
+            total += r.rating;
         });
-       
+
         return total / ratingsCount;
 
     };
@@ -147,15 +154,15 @@ const PDBoard = (props) => {
                 : <Typography variant="body2" color="textSecondary" component="p">
                     {pdi.description}
                 </Typography>;
-            
+
             let addedBy = pdi.addedBy == null || pdi.addedBy.trim().length === 0
                 ? null
                 : <Typography variant="body2" color="textSecondary" component="p">
                     Added By: {pdi.addedBy}
                 </Typography>;
 
-            let reviewsComments =  pdi.reviews.filter(rv => rv.comment !== null && rv.comment.trim().length > 0);
-            let reviewsCount =  reviewsComments.length;
+            let reviewsComments = pdi.reviews.filter(rv => rv.comment !== null && rv.comment.trim().length > 0);
+            let reviewsCount = reviewsComments.length;
             let ratingsCount = pdi.reviews.filter(rv => rv.rating !== null).length;
             let averageRating = calculateAverageRating(pdi.reviews, ratingsCount);
 
@@ -172,16 +179,16 @@ const PDBoard = (props) => {
                         color1="silver" />
                     <span className={classes.Ratings}>({ratingsCount.toLocaleString()} ratings)</span>
                 </div>
-            );            
+            );
 
             return (
                 <Card key={pdi.id} className={classes.PDCard}>
                     <CardHeader className={[materialClasses.cardHeader, classes.PDCardHeader].join(' ')}
                         avatar={
                             <Avatar aria-label="pd" className={materialClasses.avatar}>
-                                {pdi.isBook ? 
-                                    <MenuBookIcon style={{ color: 'white' }} /> : 
-                                    <SchoolIcon style={{ color: 'white' }} />} 
+                                {pdi.isBook ?
+                                    <MenuBookIcon style={{ color: 'white' }} /> :
+                                    <SchoolIcon style={{ color: 'white' }} />}
                             </Avatar>
                         }
                         action={
@@ -191,9 +198,9 @@ const PDBoard = (props) => {
                                 partitionkey={pdi.partitionkey}
                                 iconStyle={{ color: "black" }} />
                         }
-                        title={pdi.weblink.trim().length > 0 ? 
-                                <a className={classes.PDTitle} href={pdi.weblink} target="_blank" rel='noopener noreferrer'>{pdi.title}</a> : 
-                                <span className={classes.PDTitleSpan}>{pdi.title}</span>}
+                        title={pdi.weblink.trim().length > 0 ?
+                            <a className={classes.PDTitle} href={pdi.weblink} target="_blank" rel='noopener noreferrer'>{pdi.title}</a> :
+                            <span className={classes.PDTitleSpan}>{pdi.title}</span>}
                         subheader={pdi.author}
                     />
                     <CardContent>
@@ -237,7 +244,17 @@ const PDBoard = (props) => {
                 onClose={handleRateClose}
                 onOk={onRateItem}
             />
-
+            <div className={classes.SendRequestButton} >
+                <MailTo email="dawsonkroeker_obs+mbnpwcyso0yxfiakkcs0@boards.trello.com" subject="PD Board Feature Request" body="">
+                    <Button
+                        variant="contained"
+                        className={materialClasses.sendRequest}
+                        endIcon={<Icon>send</Icon>}
+                    >
+                        Send Feature Request
+                </Button>
+                </MailTo>
+            </div>
         </div>
     );
 }
