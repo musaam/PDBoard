@@ -67,9 +67,13 @@ const PDBoard = (props) => {
         onGetPDItems();
     }, [onGetPDItems]);
 
-    const handleExpandClick = (pdItemId) => {
-        dispatch(actionCreators.selectPDItem(pdItemId));
-        setExpanded(!expanded);
+    const handleExpandClick = (pdItemId) => {       
+        setExpanded(
+            selectedPDItem === null 
+            || (selectedPDItem !== null && selectedPDItem.id !== pdItemId) 
+            || (selectedPDItem !== null && selectedPDItem.id === pdItemId && !expanded)
+        );        
+        dispatch(actionCreators.selectPDItem(pdItemId));      
     };
 
     const onEditItem = (pdItemId) => {
@@ -208,7 +212,7 @@ const PDBoard = (props) => {
                             <span className={classes.ShowReviewText} >Reviews ({reviewsCount})</span>
                             <ExpandMoreIcon
                                 className={clsx(materialClasses.expand, {
-                                    [materialClasses.expandOpen]: expanded,
+                                    [materialClasses.expandOpen]: expanded && selectedPDItem != null && pdi.id === selectedPDItem.id,
                                 })}
                             />
                         </IconButton>
